@@ -11,18 +11,19 @@ const cartArray = [
 
 // this is not working find out why later //
 cart.get('/', (req, res) => {
-    const maxPrice = parseFloat(req.query.maxPrice);
-    const prefix = req.query.prefix;
-    const pageSize = parseInt(req.query.pageSize);
+    const maxPrice = req.query.maxPrice ? parseInt(req.query.maxPrice) : null;
+    const prefix = req.query.prefix ? req.query.prefix : null;
+    const pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : null;
+    let myItems = cartArray;
     if (maxPrice) {
-        cartArray === cartArray.filter(i => i.price <= maxPrice);
+        myItems =myItems.filter( item => item.price <= maxPrice);
     } if (prefix) {
-        cartArray === cartArray.filter(i => i.product.toUpperCase().startsWith(prefix.toUpperCase()));
+        myItems = myItems.filter( item => item.product.toUpperCase().startsWith(prefix.toUpperCase()));
     } if (pageSize) {
-        cartArray === cartArray.slice(0, pageSize);
+        myItems =  myItems.slice(0, pageSize);
     }
     res.status(200);
-    res.json(cartArray);
+    res.send(myItems);
 });
 
 cart.get('/:id', (req, res) => {
